@@ -6,6 +6,10 @@
 #include <QVector>
 #include <QVector2D>
 #include <QVector3D>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLDebugLogger>
+#include <QOpenGLShaderProgram>
 
 /**
  * @brief The Model class
@@ -20,6 +24,7 @@ class Model
 {
 public:
     Model(QString filename);
+    Model();
 
     // Used for glDrawArrays()
     QVector<QVector3D> getVertices();
@@ -45,6 +50,26 @@ public:
     int getNumTriangles();
 
     void unitize();
+
+    QVector<float> meshData;
+
+    // Buffers
+    GLuint meshVAO;
+    GLuint meshVBO;
+    GLuint meshSize;
+
+    // Texture
+    GLuint texturePtr;
+
+    // Transforms
+    float scale = 1.f;
+    QVector3D rotation;
+    QMatrix4x4 projectionTransform;
+    QMatrix3x3 meshNormalTransform;
+    QMatrix4x4 meshTransform;
+
+    // Phong model constants.
+    QVector4D material = {0.5, 0.5, 1, 5};
 
 private:
 

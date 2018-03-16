@@ -77,6 +77,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     GLfloat rotationAmount;
     GLfloat rotationSpeed = 1;
 
+    Model models[4];
+
 public:
     enum ShadingMode : GLuint
     {

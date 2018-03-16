@@ -31,7 +31,10 @@ MainView::~MainView() {
 
     qDebug() << "MainView destructor";
 
-    glDeleteTextures(1, &texturePtr);
+    glDeleteTextures(1, &(models[0].texturePtr));
+    glDeleteTextures(1, &(models[1].texturePtr));
+    glDeleteTextures(1, &(models[2].texturePtr));
+    glDeleteTextures(1, &(models[3].texturePtr));
 
     destroyModelBuffers();
 }
@@ -129,22 +132,27 @@ void MainView::createShaderProgram()
 
 void MainView::loadMesh()
 {
-    Model model(":/models/sickleobj.obj");
-    model.unitize();
-    QVector<float> meshData = model.getVNTInterleaved();
+    models[0] = Model(":/models/sickleobj.obj");
+    models[1] = Model(":/models/cat.obj");
+    models[2] = Model(":/models/cat.obj");
+    models[3] = Model(":/models/cat.obj");
 
-    this->meshSize = model.getVertices().size();
+    for(int i=0; i<4; i++){
+
+    models[i].unitize();
+    models[i].meshData = models[i].getVNTInterleaved(); //QVector<float> meshData = model.getVNTInterleaved();
+    models[i].meshSize = models[i].getVertices().size();//this->meshSize = model.getVertices().size();
 
     // Generate VAO
-    glGenVertexArrays(1, &meshVAO);
-    glBindVertexArray(meshVAO);
+    glGenVertexArrays(1, &(models[i].meshVAO));
+    glBindVertexArray(models[i].meshVAO);
 
     // Generate VBO
-    glGenBuffers(1, &meshVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+    glGenBuffers(1, &(models[i].meshVBO));
+    glBindBuffer(GL_ARRAY_BUFFER, models[i].meshVBO);
 
     // Write the data to the buffer
-    glBufferData(GL_ARRAY_BUFFER, meshData.size() * sizeof(float), meshData.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, models[i].meshData.size() * sizeof(float), models[i].meshData.data(), GL_STATIC_DRAW);
 
     // Set vertex coordinates to location 0
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
@@ -160,12 +168,21 @@ void MainView::loadMesh()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    }
+    qDebug() << ":: Here";
 }
 
 void MainView::loadTextures()
 {
-    glGenTextures(1, &texturePtr);
-    loadTexture(":/textures/initialShadingGroup_Base_Color.png", texturePtr);
+      glGenTextures(1, &(models[0].texturePtr));
+      glGenTextures(1, &(models[1].texturePtr));
+      glGenTextures(1, &(models[2].texturePtr));
+      glGenTextures(1, &(models[3].texturePtr));
+      loadTexture(":/textures/initialShadingGroup_Base_Color.png", models[0].texturePtr);
+      loadTexture(":/textures/cat_diff.png", models[1].texturePtr);
+      loadTexture(":/textures/cat_diff.png", models[2].texturePtr);
+      loadTexture(":/textures/cat_diff.png", models[3].texturePtr);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)
@@ -221,11 +238,13 @@ void MainView::paintGL() {
     updateModelTransforms();
 
     // Set the texture and draw the mesh.
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texturePtr);
+    for(int i=0; i<4; i++) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, models[i].texturePtr);
 
-    glBindVertexArray(meshVAO);
-    glDrawArrays(GL_TRIANGLES, 0, meshSize);
+        glBindVertexArray(models[i].meshVAO);
+        glDrawArrays(GL_TRIANGLES, 0, models[i].meshSize);
+    }
 
     shaderProgram->release();
 }
@@ -288,7 +307,7 @@ void MainView::updateProjectionTransform()
 void MainView::updateModelTransforms()
 {
     meshTransform.setToIdentity();
-    meshTransform.translate(0, 0, -4);
+    meshTransform.translate(0, 2, -4);
     meshTransform.scale(scale);
     rotationAmount++;
     meshTransform.rotate(rotationAmount, QVector3D(1,1,1));
@@ -302,8 +321,10 @@ void MainView::updateModelTransforms()
 
 void MainView::destroyModelBuffers()
 {
-    glDeleteBuffers(1, &meshVBO);
-    glDeleteVertexArrays(1, &meshVAO);
+    for (int i=0; i<4; i++) {
+        glDeleteBuffers(1, &meshVBO);
+        glDeleteVertexArrays(1, &meshVAO);
+    }
 }
 
 // --- Public interface

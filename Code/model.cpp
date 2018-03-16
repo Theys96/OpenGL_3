@@ -70,6 +70,10 @@ Model::Model(QString filename) {
     }
 }
 
+Model::Model() {
+
+}
+
 /**
  * @brief Model::unitze Not Implemented yet!
  *
