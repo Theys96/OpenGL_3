@@ -65,7 +65,7 @@ void MainView::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
-    glClearColor(0.0, 1.0, 0.0, 1.0);
+    glClearColor(0.0, 0.5, 0.0, 0.0);
 
     createShaderProgram();
     loadMesh();
@@ -74,6 +74,10 @@ void MainView::initializeGL() {
     // Initialize transformations
     updateProjectionTransform();
     updateModelTransforms();
+
+    // Initialise animation
+    rotationAmount = 1;
+    timer.start(1000.0 / 60.0);
 }
 
 void MainView::createShaderProgram()
@@ -125,7 +129,7 @@ void MainView::createShaderProgram()
 
 void MainView::loadMesh()
 {
-    Model model(":/models/cat.obj");
+    Model model(":/models/sickleobj.obj");
     model.unitize();
     QVector<float> meshData = model.getVNTInterleaved();
 
@@ -161,7 +165,7 @@ void MainView::loadMesh()
 void MainView::loadTextures()
 {
     glGenTextures(1, &texturePtr);
-    loadTexture(":/textures/cat_diff.png", texturePtr);
+    loadTexture(":/textures/initialShadingGroup_Base_Color.png", texturePtr);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)
@@ -191,7 +195,7 @@ void MainView::loadTexture(QString file, GLuint texturePtr)
  */
 void MainView::paintGL() {
     // Clear the screen before rendering
-    glClearColor(0.2f, 0.5f, 0.7f, 0.0f);
+    glClearColor(0.5f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Choose the selected shader.
@@ -213,6 +217,8 @@ void MainView::paintGL() {
         updatePhongUniforms();
         break;
     }
+
+    updateModelTransforms();
 
     // Set the texture and draw the mesh.
     glActiveTexture(GL_TEXTURE0);
@@ -284,6 +290,8 @@ void MainView::updateModelTransforms()
     meshTransform.setToIdentity();
     meshTransform.translate(0, 0, -4);
     meshTransform.scale(scale);
+    rotationAmount++;
+    meshTransform.rotate(rotationAmount, QVector3D(1,1,1));
     meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
     meshNormalTransform = meshTransform.normalMatrix();
 
