@@ -134,8 +134,8 @@ void MainView::createShaderProgram()
 void MainView::loadMesh()
 {
     models[0] = Model(":/models/sickleobj.obj");
+    models[2] = Model(":/models/sickleobj.obj");
     models[1] = Model(":/models/cat.obj");
-    models[2] = Model(":/models/cat.obj");
     models[3] = Model(":/models/cat.obj");
 
     models[0].position = QVector3D(0,0.8,-4);
@@ -145,7 +145,7 @@ void MainView::loadMesh()
 
     models[0].animation = QVector3D(0,1,0);
     models[1].animation = QVector3D(1,0,0);
-    models[2].animation = QVector3D(0,0,1);
+    models[2].animation = QVector3D(1,0,0);
     models[3].animation = QVector3D(-1,0,0);
 
 
@@ -193,8 +193,8 @@ void MainView::loadTextures()
       glGenTextures(1, &(models[2].texturePtr));
       glGenTextures(1, &(models[3].texturePtr));
       loadTexture(":/textures/initialShadingGroup_Base_Color.png", models[0].texturePtr);
+      loadTexture(":/textures/initialShadingGroup_Base_Color.png", models[2].texturePtr);
       loadTexture(":/textures/cat_diff.png", models[1].texturePtr);
-      loadTexture(":/textures/cat_diff.png", models[2].texturePtr);
       loadTexture(":/textures/cat_diff.png", models[3].texturePtr);
 }
 
@@ -329,7 +329,9 @@ void MainView::updateModelTransforms(int i)
     models[i].meshTransform.translate(models[i].position);
     models[i].meshTransform.scale(scale);
     rotationAmount++;
-    models[i].meshTransform.rotate(90, QVector3D(0,-1,0));
+    if(i==1 || i==3) {
+        models[i].meshTransform.rotate(90, QVector3D(0,-1,0));
+    }
     models[i].meshTransform.rotate(rotationAmount, models[i].animation);
     models[i].meshNormalTransform = models[i].meshTransform.normalMatrix();
 
