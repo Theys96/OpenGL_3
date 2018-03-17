@@ -67,6 +67,8 @@ public:
     QMatrix4x4 projectionTransform;
     QMatrix3x3 meshNormalTransform;
     QMatrix4x4 meshTransform;
+    QVector3D position;
+    QVector3D animation;
 
     // Phong model constants.
     QVector4D material = {0.5, 0.5, 1, 5};

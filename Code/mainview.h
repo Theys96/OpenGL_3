@@ -77,7 +77,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     GLfloat rotationAmount;
     GLfloat rotationSpeed = 1;
 
+    //Animation
     Model models[4];
+    bool initialised = false;
 
 public:
     enum ShadingMode : GLuint
@@ -123,11 +125,11 @@ private:
     void destroyModelBuffers();
 
     void updateProjectionTransform();
-    void updateModelTransforms();
+    void updateModelTransforms(int i);
 
-    void updateNormalUniforms();
-    void updateGouraudUniforms();
-    void updatePhongUniforms();
+    void updateNormalUniforms(int i);
+    void updateGouraudUniforms(int i);
+    void updatePhongUniforms(int i);
 
     // Useful utility method to convert image to bytes.
     QVector<quint8> imageToBytes(QImage image);

@@ -76,8 +76,9 @@ void MainView::initializeGL() {
 
     // Initialize transformations
     updateProjectionTransform();
-    updateModelTransforms();
-
+    for(int i=0; i<4; i++){
+        updateModelTransforms(i);
+    }
     // Initialise animation
     rotationAmount = 1;
     timer.start(1000.0 / 60.0);
@@ -137,6 +138,18 @@ void MainView::loadMesh()
     models[2] = Model(":/models/cat.obj");
     models[3] = Model(":/models/cat.obj");
 
+    models[0].position = QVector3D(0,0.8,-4);
+    models[1].position = QVector3D(-1.5,-0.8,-4);
+    models[2].position = QVector3D(0,-0.8,-4);
+    models[3].position = QVector3D(1.5,-0.8,-4);
+
+    models[0].animation = QVector3D(0,1,0);
+    models[1].animation = QVector3D(1,0,0);
+    models[2].animation = QVector3D(0,0,1);
+    models[3].animation = QVector3D(-1,0,0);
+
+
+
     for(int i=0; i<4; i++){
 
     models[i].unitize();
@@ -170,7 +183,7 @@ void MainView::loadMesh()
     glBindVertexArray(0);
 
     }
-    qDebug() << ":: Here";
+
 }
 
 void MainView::loadTextures()
@@ -217,35 +230,37 @@ void MainView::paintGL() {
 
     // Choose the selected shader.
     QOpenGLShaderProgram *shaderProgram;
-    switch (currentShader) {
-    case NORMAL:
-        shaderProgram = &normalShaderProgram;
-        shaderProgram->bind();
-        updateNormalUniforms();
-        break;
-    case GOURAUD:
-        shaderProgram = &gouraudShaderProgram;
-        shaderProgram->bind();
-        updateGouraudUniforms();
-        break;
-    case PHONG:
-        shaderProgram = &phongShaderProgram;
-        shaderProgram->bind();
-        updatePhongUniforms();
-        break;
-    }
-
-    updateModelTransforms();
-
-    // Set the texture and draw the mesh.
     for(int i=0; i<4; i++) {
+
+        switch (currentShader) {
+        case NORMAL:
+            shaderProgram = &normalShaderProgram;
+            shaderProgram->bind();
+            updateNormalUniforms(i);
+            break;
+        case GOURAUD:
+            shaderProgram = &gouraudShaderProgram;
+            shaderProgram->bind();
+            updateGouraudUniforms(i);
+            break;
+        case PHONG:
+            shaderProgram = &phongShaderProgram;
+            shaderProgram->bind();
+            updatePhongUniforms(i);
+            break;
+        }
+
+        if(initialised) {
+            updateModelTransforms(i);
+        }
+
+        // Set the texture and draw the mesh.
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, models[i].texturePtr);
-
         glBindVertexArray(models[i].meshVAO);
         glDrawArrays(GL_TRIANGLES, 0, models[i].meshSize);
     }
-
+    initialised = true;
     shaderProgram->release();
 }
 
@@ -264,18 +279,18 @@ void MainView::resizeGL(int newWidth, int newHeight)
     updateProjectionTransform();
 }
 
-void MainView::updateNormalUniforms()
+void MainView::updateNormalUniforms(int i)
 {
     glUniformMatrix4fv(uniformProjectionTransformNormal, 1, GL_FALSE, projectionTransform.data());
-    glUniformMatrix4fv(uniformModelViewTransformNormal, 1, GL_FALSE, meshTransform.data());
-    glUniformMatrix3fv(uniformNormalTransformNormal, 1, GL_FALSE, meshNormalTransform.data());
+    glUniformMatrix4fv(uniformModelViewTransformNormal, 1, GL_FALSE, models[i].meshTransform.data());
+    glUniformMatrix3fv(uniformNormalTransformNormal, 1, GL_FALSE, models[i].meshNormalTransform.data());
 }
 
-void MainView::updateGouraudUniforms()
+void MainView::updateGouraudUniforms(int i)
 {
     glUniformMatrix4fv(uniformProjectionTransformGouraud, 1, GL_FALSE, projectionTransform.data());
-    glUniformMatrix4fv(uniformModelViewTransformGouraud, 1, GL_FALSE, meshTransform.data());
-    glUniformMatrix3fv(uniformNormalTransformGouraud, 1, GL_FALSE, meshNormalTransform.data());
+    glUniformMatrix4fv(uniformModelViewTransformGouraud, 1, GL_FALSE, models[i].meshTransform.data());
+    glUniformMatrix3fv(uniformNormalTransformGouraud, 1, GL_FALSE, models[i].meshNormalTransform.data());
 
     glUniform4fv(uniformMaterialGouraud, 1, &material[0]);
     glUniform3fv(uniformLightPositionGouraud, 1, &lightPosition[0]);
@@ -284,11 +299,11 @@ void MainView::updateGouraudUniforms()
     glUniform1i(uniformTextureSamplerGouraud, 0); // Redundant now, but useful when you have multiple textures.
 }
 
-void MainView::updatePhongUniforms()
+void MainView::updatePhongUniforms(int i)
 {
     glUniformMatrix4fv(uniformProjectionTransformPhong, 1, GL_FALSE, projectionTransform.data());
-    glUniformMatrix4fv(uniformModelViewTransformPhong, 1, GL_FALSE, meshTransform.data());
-    glUniformMatrix3fv(uniformNormalTransformPhong, 1, GL_FALSE, meshNormalTransform.data());
+    glUniformMatrix4fv(uniformModelViewTransformPhong, 1, GL_FALSE, models[i].meshTransform.data());
+    glUniformMatrix3fv(uniformNormalTransformPhong, 1, GL_FALSE, models[i].meshNormalTransform.data());
 
     glUniform4fv(uniformMaterialPhong, 1, &material[0]);
     glUniform3fv(uniformLightPositionPhong, 1, &lightPosition[0]);
@@ -302,17 +317,21 @@ void MainView::updateProjectionTransform()
     float aspect_ratio = static_cast<float>(width()) / static_cast<float>(height());
     projectionTransform.setToIdentity();
     projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
+    projectionTransform.translate(0,0,-4);
+    projectionTransform.rotate(QQuaternion::fromEulerAngles(rotation));
+    projectionTransform.translate(0,0,4);
 }
 
-void MainView::updateModelTransforms()
+void MainView::updateModelTransforms(int i)
 {
-    meshTransform.setToIdentity();
-    meshTransform.translate(0, 2, -4);
-    meshTransform.scale(scale);
+
+    models[i].meshTransform.setToIdentity();
+    models[i].meshTransform.translate(models[i].position);
+    models[i].meshTransform.scale(scale);
     rotationAmount++;
-    meshTransform.rotate(rotationAmount, QVector3D(1,1,1));
-    meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
-    meshNormalTransform = meshTransform.normalMatrix();
+    models[i].meshTransform.rotate(90, QVector3D(0,-1,0));
+    models[i].meshTransform.rotate(rotationAmount, models[i].animation);
+    models[i].meshNormalTransform = models[i].meshTransform.normalMatrix();
 
     update();
 }
@@ -322,8 +341,8 @@ void MainView::updateModelTransforms()
 void MainView::destroyModelBuffers()
 {
     for (int i=0; i<4; i++) {
-        glDeleteBuffers(1, &meshVBO);
-        glDeleteVertexArrays(1, &meshVAO);
+        glDeleteBuffers(1, &(models[i].meshVBO));
+        glDeleteVertexArrays(1, &(models[i].meshVAO));
     }
 }
 
@@ -332,13 +351,17 @@ void MainView::destroyModelBuffers()
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ)
 {
     rotation = { static_cast<float>(rotateX), static_cast<float>(rotateY), static_cast<float>(rotateZ) };
-    updateModelTransforms();
+    for(int i=0; i<4; i++){
+    updateProjectionTransform();
+    }
 }
 
 void MainView::setScale(int newScale)
 {
     scale = static_cast<float>(newScale) / 100.f;
-    updateModelTransforms();
+    for(int i=0; i<4; i++){
+    updateModelTransforms(i);
+    }
 }
 
 void MainView::setShadingMode(ShadingMode shading)

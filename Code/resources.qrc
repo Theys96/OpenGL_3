@@ -15,7 +15,6 @@
         <file>shaders/fragshader_normal.glsl</file>
         <file>shaders/fragshader_gouraud.glsl</file>
         <file>models/sickleobj.obj</file>
-        <file>models/sickle.obj</file>
         <file>textures/initialShadingGroup_Base_Color.png</file>
     </qresource>
 </RCC>
