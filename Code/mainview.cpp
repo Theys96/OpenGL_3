@@ -139,16 +139,18 @@ void MainView::loadMesh()
     models[3] = Model(":/models/cat.obj");
 
     models[0].position = QVector3D(0,0.8,-4);
-    models[1].position = QVector3D(-1.5,-0.8,-4);
+    models[1].position = QVector3D(-1.5,0,0);
     models[2].position = QVector3D(0,-0.8,-4);
-    models[3].position = QVector3D(1.5,-0.8,-4);
+    models[3].position = QVector3D(1.5,0,0);
 
     models[0].animation = QVector3D(0,1,0);
-    models[1].animation = QVector3D(1,0,0);
+    models[1].animation = QVector3D(0,1,0);
     models[2].animation = QVector3D(1,0,0);
-    models[3].animation = QVector3D(-1,0,0);
+    models[3].animation = QVector3D(0,-1,0);
 
-
+    models[2].scaleChange = 0.02;
+    models[2].scaleMax = 1.5;
+    models[2].scaleMin = 0.5;
 
     for(int i=0; i<4; i++){
 
@@ -316,7 +318,7 @@ void MainView::updateProjectionTransform()
 {
     float aspect_ratio = static_cast<float>(width()) / static_cast<float>(height());
     projectionTransform.setToIdentity();
-    projectionTransform.perspective(60, aspect_ratio, 0.2, 20);
+    projectionTransform.perspective((125-scale*7), aspect_ratio, 0.2, 20);
     projectionTransform.translate(0,0,-4);
     projectionTransform.rotate(QQuaternion::fromEulerAngles(rotation));
     projectionTransform.translate(0,0,4);
@@ -326,13 +328,19 @@ void MainView::updateModelTransforms(int i)
 {
 
     models[i].meshTransform.setToIdentity();
-    models[i].meshTransform.translate(models[i].position);
-    models[i].meshTransform.scale(scale);
+    models[i].updateScale();
+    qDebug() << "Model: " << i << " Scale: " << models[i].scale;
     rotationAmount++;
     if(i==1 || i==3) {
-        models[i].meshTransform.rotate(90, QVector3D(0,-1,0));
+        models[i].meshTransform.translate(0,-0.8,-4);
+        models[i].meshTransform.rotate(rotationAmount, models[i].animation);
+        models[i].meshTransform.translate(models[i].position);
+        if(i==1) {models[i].meshTransform.rotate(180, QVector3D(0,-1,0));};
+    } else {
+        models[i].meshTransform.translate(models[i].position);
+        models[i].meshTransform.rotate(rotationAmount, models[i].animation);
     }
-    models[i].meshTransform.rotate(rotationAmount, models[i].animation);
+    models[i].meshTransform.scale(models[i].scale);
     models[i].meshNormalTransform = models[i].meshTransform.normalMatrix();
 
     update();
@@ -353,17 +361,13 @@ void MainView::destroyModelBuffers()
 void MainView::setRotation(int rotateX, int rotateY, int rotateZ)
 {
     rotation = { static_cast<float>(rotateX), static_cast<float>(rotateY), static_cast<float>(rotateZ) };
-    for(int i=0; i<4; i++){
     updateProjectionTransform();
-    }
 }
 
 void MainView::setScale(int newScale)
 {
     scale = static_cast<float>(newScale) / 100.f;
-    for(int i=0; i<4; i++){
-    updateModelTransforms(i);
-    }
+    updateProjectionTransform();
 }
 
 void MainView::setShadingMode(ShadingMode shading)

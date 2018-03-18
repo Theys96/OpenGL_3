@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->ScaleSlider->setValue(1000);
+    ui->mainView->setScale(1000);
 }
 
 MainWindow::~MainWindow()
@@ -51,8 +53,8 @@ void MainWindow::on_RotationDialZ_sliderMoved(int value)
 void MainWindow::on_ResetScaleButton_clicked(bool checked)
 {
     Q_UNUSED(checked);
-    ui->ScaleSlider->setValue(100);
-    ui->mainView->setScale(100);
+    ui->ScaleSlider->setValue(1000);
+    ui->mainView->setScale(1000);
 }
 
 void MainWindow::on_ScaleSlider_sliderMoved(int value)

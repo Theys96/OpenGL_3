@@ -62,13 +62,18 @@ public:
     GLuint texturePtr;
 
     // Transforms
-    float scale = 1.f;
-    QVector3D rotation;
-    QMatrix4x4 projectionTransform;
     QMatrix3x3 meshNormalTransform;
     QMatrix4x4 meshTransform;
     QVector3D position;
     QVector3D animation;
+
+    //Animation
+    float scale = 1.f;
+    float scaleChange = 0.f;
+    float scaleMax = 1.f;
+    float scaleMin = 1.f;
+    bool grow = true;
+    void updateScale();
 
     // Phong model constants.
     QVector4D material = {0.5, 0.5, 1, 5};

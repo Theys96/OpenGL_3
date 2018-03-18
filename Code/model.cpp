@@ -360,4 +360,20 @@ void Model::unpackIndexes() {
             textureCoords.append(tex[texcoord_indices[i]]);
         }
     }
+
+}
+
+void Model::updateScale() {
+    if (scale+scaleChange > scaleMax) {
+        grow = false;
+    }
+    if (scale-scaleChange < scaleMin) {
+        grow = true;
+    }
+    if (grow) {
+        scale += scaleChange;
+    } else {
+        scale -= scaleChange;
+    }
+
 }
