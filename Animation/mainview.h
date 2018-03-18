@@ -75,7 +75,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     //Rotation
     GLfloat rotationAmount;
-    GLfloat rotationSpeed = 1;
+    GLfloat rotationSpeed = 0.3;
 
     //Animation
     Model models[4];

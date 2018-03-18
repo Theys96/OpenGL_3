@@ -329,8 +329,8 @@ void MainView::updateModelTransforms(int i)
 
     models[i].meshTransform.setToIdentity();
     models[i].updateScale();
-    qDebug() << "Model: " << i << " Scale: " << models[i].scale;
-    rotationAmount++;
+    // qDebug() << "Model: " << i << " Scale: " << models[i].scale;
+    rotationAmount += rotationSpeed;
     if(i==1 || i==3) {
         models[i].meshTransform.translate(0,-0.8,-4);
         models[i].meshTransform.rotate(rotationAmount, models[i].animation);
