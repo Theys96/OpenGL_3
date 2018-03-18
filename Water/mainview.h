@@ -35,6 +35,9 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
 
     GLint uniformTextureSampler;
 
+    GLint uniformTime;
+    GLfloat t = 0;
+
     // Buffers
     GLuint meshVAO;
     GLuint meshVBO;

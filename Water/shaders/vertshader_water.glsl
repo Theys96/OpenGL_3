@@ -24,7 +24,7 @@ out vec2 uvCoords;
 uniform float amp = 0.1;
 uniform float timestep = 100;
 uniform float freq = 5.0;
-uniform float time = 0.0;
+uniform float time;
 
 void main()
 {

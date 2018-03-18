@@ -74,6 +74,8 @@ void MainView::initializeGL() {
     // Initialize transformations
     updateProjectionTransform();
     updateModelTransforms();
+
+    timer.start(1000.0 / 60.0);
 }
 
 void MainView::createShaderProgram()
@@ -94,6 +96,7 @@ void MainView::createShaderProgram()
     uniformLightPosition       = shaderProgram.uniformLocation("lightPosition");
     uniformLightColour         = shaderProgram.uniformLocation("lightColour");
     uniformTextureSampler      = shaderProgram.uniformLocation("textureSampler");
+    uniformTime                = shaderProgram.uniformLocation("time");
 }
 
 void MainView::loadMesh()
@@ -204,6 +207,7 @@ void MainView::updateUniforms()
     glUniform3fv(uniformLightColour, 1, &lightColour[0]);
 
     glUniform1i(uniformTextureSampler, 0);
+    glUniform1f(uniformTime, ++t);
 }
 
 void MainView::updateProjectionTransform()
