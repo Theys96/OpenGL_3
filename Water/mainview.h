@@ -54,8 +54,8 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QMatrix4x4 meshTransform;
 
     // Phong model constants.
-    QVector4D material = {0.5, 0.5, 1, 5};
-    QVector3D lightPosition = {1, 100, 1};
+    QVector4D material = {0.4, 0.6, 1, 10};
+    QVector3D lightPosition = {0, 3, 3};
     QVector3D lightColour = {1, 1, 1};
 
 public:

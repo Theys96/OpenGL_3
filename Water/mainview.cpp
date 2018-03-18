@@ -137,7 +137,7 @@ void MainView::loadMesh()
 void MainView::loadTextures()
 {
     glGenTextures(1, &texturePtr);
-    loadTexture(":/textures/rug_logo.png", texturePtr);
+    loadTexture(":/textures/sea-map.png", texturePtr);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)
@@ -223,7 +223,7 @@ void MainView::updateModelTransforms()
     meshTransform.translate(0, 0, -4);
     meshTransform.scale(scale);
     meshTransform.rotate(QQuaternion::fromEulerAngles(rotation));
-    meshTransform.rotate(-70, QVector3D(1,0,0));
+    meshTransform.rotate(-60, QVector3D(1,0,0));
     meshNormalTransform = meshTransform.normalMatrix();
 
     update();

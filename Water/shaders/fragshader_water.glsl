@@ -8,6 +8,7 @@ in vec3 vertNormal;
 in vec3 vertPosition;
 in vec3 relativeLightPosition;
 in vec2 uvCoords;
+in vec3 pos;
 
 // Lighting model constants.
 uniform vec4 material;
@@ -20,10 +21,15 @@ uniform sampler2D textureSampler;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 vertColour;
 
+// Specify wave constants
+uniform float amp = 0.05;
+
 void main()
 {
   // Ambient colour does not depend on any vectors.
-  vec3 texColour = texture(textureSampler, uvCoords).xyz;
+  float step = smoothstep(-0.2, 0.2, pos.z);
+
+  vec3 texColour = mix(vec3(0.1, 0.2, 0.3), vec3(0.3, 0.6, 0.9), step); //texture(textureSampler, uvCoords).xyz;
   vec3 colour    = material.x * texColour;
 
   // Calculate light direction vectors in the phong model.
@@ -40,6 +46,6 @@ void main()
   float specularIntesity = max(dot(reflectDirection, viewDirection), 0);
   colour += texColour * lightColour * material.z * pow(specularIntesity, material.w);
 
-  vertColour = vec4(uvCoords, 0.0, 1.0);
-  //fColor = vec2(texCoords, 0.0, 1.0);
+  vertColour = vec4(colour, 1.0);
+  //fColor = vec(texColour, 1.0);
 }

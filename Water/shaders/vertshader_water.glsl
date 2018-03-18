@@ -19,27 +19,27 @@ out vec3 vertNormal;
 out vec3 vertPosition;
 out vec3 relativeLightPosition;
 out vec2 uvCoords;
+out vec3 pos;
 
 // Specify wave constants
-uniform float amp = 0.1;
+uniform float amp = 0.05;
 uniform float timestep = 100;
 uniform float freq = 5.0;
 uniform float time;
 
 void main()
 {
-    vec3 pos = vertCoordinates_in;
+    pos = vertCoordinates_in;
     pos.z = amp * sin(2*M_PI*(time/timestep + pos.y*freq));
 
     // derivative of pos.z:
-    float dU = freq * amp * cos(2*M_PI*(time/timestep + pos.y*freq));
-    vec3 normal = normalize(vec3(-dU, 0, 1.0));
+    float dU = 2*M_PI * freq * amp * cos(2*M_PI*(time/timestep + pos.y*freq));
+    vertNormal = normalTransform * vec3(-dU, 0, 1.0);
 
     gl_Position  = projectionTransform * modelViewTransform * vec4(pos, 1.0);
 
     // Pass the required information to the fragment stage.
     relativeLightPosition = vec3(modelViewTransform * vec4(lightPosition, 1));
-    vertPosition = vec3(modelViewTransform * vec4(vertCoordinates_in, 1));
-    vertNormal   = normalTransform * vertNormals_in;
+    vertPosition = vec3(modelViewTransform * vec4(pos, 1));
     uvCoords     = texCoords_in;
 }

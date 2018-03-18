@@ -7,5 +7,6 @@
         <file>shaders/fragshader_water.glsl</file>
         <file>shaders/vertshader_water.glsl</file>
         <file>models/grid.obj</file>
+        <file>textures/sea-map.png</file>
     </qresource>
 </RCC>
