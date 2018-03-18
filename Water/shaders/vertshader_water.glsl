@@ -30,6 +30,11 @@ void main()
 {
     vec3 pos = vertCoordinates_in;
     pos.z = amp * sin(2*M_PI*(time/timestep + pos.y*freq));
+
+    // derivative of pos.z:
+    float dU = freq * amp * cos(2*M_PI*(time/timestep + pos.y*freq));
+    vec3 normal = normalize(vec3(-dU, 0, 1.0));
+
     gl_Position  = projectionTransform * modelViewTransform * vec4(pos, 1.0);
 
     // Pass the required information to the fragment stage.
