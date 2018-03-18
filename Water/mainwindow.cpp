@@ -59,30 +59,3 @@ void MainWindow::on_ScaleSlider_sliderMoved(int value)
 {
     ui->mainView->setScale(value);
 }
-
-void MainWindow::on_PhongButton_toggled(bool checked)
-{
-    if (checked)
-    {
-        ui->mainView->setShadingMode(MainView::PHONG);
-        ui->mainView->update();
-    }
-}
-
-void MainWindow::on_NormalButton_toggled(bool checked)
-{
-    if (checked)
-    {
-        ui->mainView->setShadingMode(MainView::NORMAL);
-        ui->mainView->update();
-    }
-}
-
-void MainWindow::on_GouraudButton_toggled(bool checked)
-{
-    if (checked)
-    {
-        ui->mainView->setShadingMode(MainView::GOURAUD);
-        ui->mainView->update();
-    }
-}

@@ -251,12 +251,6 @@ void MainView::setScale(int newScale)
     updateModelTransforms();
 }
 
-void MainView::setShadingMode(ShadingMode shading)
-{
-    qDebug() << "Changed shading to" << shading;
-    currentShader = shading;
-}
-
 // --- Private helpers
 
 /**
