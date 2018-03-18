@@ -28,14 +28,22 @@ uniform float phase[4];
 uniform float timestep = 100;
 uniform float time;
 
+float waveHeight(int i, float u) {
+    return amp[i] * sin(2*M_PI*(time/timestep + phase[i] + u*freq[i]));
+}
+
+float waveDU(int i, float u) {
+    return 2*M_PI * freq[i] * amp[i] * cos(2*M_PI*(time/timestep + phase[i] + u*freq[i]));
+}
+
 void main()
 {
     pos = vertCoordinates_in;
     pos.z = 0;
     float dU = 0;
     for (int i = 0; i < 4; i++) {
-        pos.z += amp[i] * sin(2*M_PI*(time/timestep + phase[i] + pos.y*freq[i]));
-        dU += 2*M_PI * freq[i] * amp[i] * cos(2*M_PI*(time/timestep + phase[i] + pos.y*freq[i]));
+        pos.z += waveHeight(i, pos.y);
+        dU += waveDU(i, pos.y);
     }
 
     // derivative of pos.z:
