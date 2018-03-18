@@ -18,7 +18,7 @@ out vec4 fColour;
 
 void main()
 {
-  vec3 texColor = texture2D(textureSampler, texCoords).xyz;
+  vec3 texColor = texture(textureSampler, texCoords).xyz;
 
   // Combine the received components into one colour.
   fColour = vec4(ambient * texColor + (diffuse + specular) * lightColour * texColor, 1);

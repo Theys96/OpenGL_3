@@ -23,7 +23,7 @@ out vec4 vertColour;
 void main()
 {
   // Ambient colour does not depend on any vectors.
-  vec3 texColour = texture2D(textureSampler, texCoords).xyz;
+  vec3 texColour = texture(textureSampler, texCoords).xyz;
   vec3 colour    = material.x * texColour;
 
   // Calculate light direction vectors in the phong model.
