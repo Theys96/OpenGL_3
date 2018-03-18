@@ -47,7 +47,7 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     GLuint texturePtr;
 
     // Transforms
-    float scale = 1.f;
+    float scale = 2.f;
     QVector3D rotation;
     QMatrix4x4 projectionTransform;
     QMatrix3x3 meshNormalTransform;
