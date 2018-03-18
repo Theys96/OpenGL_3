@@ -102,9 +102,9 @@ void MainView::createShaderProgram()
     GLint uniformAmp = shaderProgram.uniformLocation("amp");
     GLint uniformFreq = shaderProgram.uniformLocation("freq");
     GLint uniformPhase = shaderProgram.uniformLocation("phase");
-    glUniform1fv(uniformAmp, 2, amp.data());
-    glUniform1fv(uniformFreq, 2, freq.data());
-    glUniform1fv(uniformPhase, 2, phase.data());
+    glUniform1fv(uniformAmp, amp.length(), amp.data());
+    glUniform1fv(uniformFreq, amp.length(), freq.data());
+    glUniform1fv(uniformPhase, amp.length(), phase.data());
 }
 
 void MainView::loadMesh()

@@ -22,9 +22,9 @@ out vec2 uvCoords;
 out vec3 pos;
 
 // Specify wave constants
-uniform float amp[3];
-uniform float freq[3];
-uniform float phase[3];
+uniform float amp[4];
+uniform float freq[4];
+uniform float phase[4];
 uniform float timestep = 100;
 uniform float time;
 
@@ -33,7 +33,7 @@ void main()
     pos = vertCoordinates_in;
     pos.z = 0;
     float dU = 0;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
         pos.z += amp[i] * sin(2*M_PI*(time/timestep + phase[i] + pos.y*freq[i]));
         dU += 2*M_PI * freq[i] * amp[i] * cos(2*M_PI*(time/timestep + phase[i] + pos.y*freq[i]));
     }
