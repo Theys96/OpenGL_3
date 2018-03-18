@@ -22,36 +22,18 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QOpenGLDebugLogger *debugLogger;
     QTimer timer; // timer used for animation
 
-    QOpenGLShaderProgram normalShaderProgram,
-                         gouraudShaderProgram,
-                         phongShaderProgram;
-
-    // Uniforms for the normal shader.
-    GLint uniformModelViewTransformNormal;
-    GLint uniformProjectionTransformNormal;
-    GLint uniformNormalTransformNormal;
-
-    // Uniforms for the gouraud shader.
-    GLint uniformModelViewTransformGouraud;
-    GLint uniformProjectionTransformGouraud;
-    GLint uniformNormalTransformGouraud;
-
-    GLint uniformMaterialGouraud;
-    GLint uniformLightPositionGouraud;
-    GLint uniformLightColourGouraud;
-
-    GLint uniformTextureSamplerGouraud;
+    QOpenGLShaderProgram shaderProgram;
 
     // Uniforms for the phong shader.
-    GLint uniformModelViewTransformPhong;
-    GLint uniformProjectionTransformPhong;
-    GLint uniformNormalTransformPhong;
+    GLint uniformModelViewTransform;
+    GLint uniformProjectionTransform;
+    GLint uniformNormalTransform;
 
-    GLint uniformMaterialPhong;
-    GLint uniformLightPositionPhong;
-    GLint uniformLightColourPhong;
+    GLint uniformMaterial;
+    GLint uniformLightPosition;
+    GLint uniformLightColour;
 
-    GLint uniformTextureSamplerPhong;
+    GLint uniformTextureSampler;
 
     // Buffers
     GLuint meshVAO;
@@ -119,9 +101,7 @@ private:
     void updateProjectionTransform();
     void updateModelTransforms();
 
-    void updateNormalUniforms();
-    void updateGouraudUniforms();
-    void updatePhongUniforms();
+    void updateUniforms();
 
     // Useful utility method to convert image to bytes.
     QVector<quint8> imageToBytes(QImage image);

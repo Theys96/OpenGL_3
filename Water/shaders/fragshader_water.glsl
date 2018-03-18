@@ -7,7 +7,7 @@
 in vec3 vertNormal;
 in vec3 vertPosition;
 in vec3 relativeLightPosition;
-in vec2 texCoords;
+in vec2 uvCoords;
 
 // Lighting model constants.
 uniform vec4 material;
@@ -23,7 +23,7 @@ out vec4 vertColour;
 void main()
 {
   // Ambient colour does not depend on any vectors.
-  vec3 texColour = texture(textureSampler, texCoords).xyz;
+  vec3 texColour = texture(textureSampler, uvCoords).xyz;
   vec3 colour    = material.x * texColour;
 
   // Calculate light direction vectors in the phong model.
@@ -40,5 +40,6 @@ void main()
   float specularIntesity = max(dot(reflectDirection, viewDirection), 0);
   colour += texColour * lightColour * material.z * pow(specularIntesity, material.w);
 
-  vertColour = vec4(colour, 1);
+  vertColour = vec4(uvCoords, 0.0, 1.0);
+  //fColor = vec2(texCoords, 0.0, 1.0);
 }

@@ -18,15 +18,23 @@ uniform mat3 normalTransform;
 out vec3 vertNormal;
 out vec3 vertPosition;
 out vec3 relativeLightPosition;
-out vec2 texCoords;
+out vec2 uvCoords;
+
+// Specify wave constants
+uniform float amp = 0.1;
+uniform float timestep = 100;
+uniform float freq = 5.0;
+uniform float time = 0.0;
 
 void main()
 {
-    gl_Position  = projectionTransform * modelViewTransform * vec4(vertCoordinates_in, 1.0);
+    vec3 pos = vertCoordinates_in;
+    pos.z = amp * sin(2*M_PI*(time/timestep + pos.y*freq));
+    gl_Position  = projectionTransform * modelViewTransform * vec4(pos, 1.0);
 
     // Pass the required information to the fragment stage.
     relativeLightPosition = vec3(modelViewTransform * vec4(lightPosition, 1));
     vertPosition = vec3(modelViewTransform * vec4(vertCoordinates_in, 1));
     vertNormal   = normalTransform * vertNormals_in;
-    texCoords    = texCoords_in;
+    uvCoords     = texCoords_in;
 }
