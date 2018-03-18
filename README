@@ -1,8 +1,15 @@
-This is a README file
+Changes made:
 
-When submitting your assignment, describe (briefly) the changes you made and what difficulties you encountered in this file.
+Rotation variable (rotaionAmount) added.
+Model was made to rotate around X axis (later removed for other animations).
+Array of model objects added to mainview.
+Model objects given their own buffers, transformation matrices, scale factors and animation/position definition vectors.
+New hammer and sickle mesh imported.
+Rotation and position definitions set for hammer and sickles.
+Rotation definitions in combination with position definitions used to make cats orbit center hammer and sickle.
+Scaling animation added to hammer and sickle.
+Perspective transform zoom/viewing angle modified by scaling bar.
+Perspective transform (eye location) modified by rotation controls. (move to origin, rotate, move to viewing distance).
+Cat texture modified.
 
-Also describe what controls (key short-cuts, mouse clicks, mouse movement etc) and possible bonus assignments you implemented, so we can check them more easily.
-
-If you have any suggestions/feedback for improving the practical assignments or support from teaching assistants, you may include it here OR post in anonymously on Nestor under Feedback.
 
