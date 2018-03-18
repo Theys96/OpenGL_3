@@ -21,9 +21,6 @@ uniform sampler2D textureSampler;
 // Usually a vec4 describing a color (Red, Green, Blue, Alpha/Transparency)
 out vec4 vertColour;
 
-// Specify wave constants
-uniform float amp = 0.05;
-
 void main()
 {
   // Ambient colour does not depend on any vectors.

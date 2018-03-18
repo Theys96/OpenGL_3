@@ -58,6 +58,11 @@ class MainView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
     QVector3D lightPosition = {0, 3, 3};
     QVector3D lightColour = {1, 1, 1};
 
+    // Waves
+    QVector<GLfloat> amp = {0.02, 0.05, 0.03};
+    QVector<GLfloat> freq = {5.0, 2.0, 1.0};
+    QVector<GLfloat> phase = {0.2, 0.0, 0.5};
+
 public:
     enum ShadingMode : GLuint
     {

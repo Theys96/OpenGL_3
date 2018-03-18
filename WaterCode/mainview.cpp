@@ -97,6 +97,14 @@ void MainView::createShaderProgram()
     uniformLightColour         = shaderProgram.uniformLocation("lightColour");
     uniformTextureSampler      = shaderProgram.uniformLocation("textureSampler");
     uniformTime                = shaderProgram.uniformLocation("time");
+
+    // Wave uniforms
+    GLint uniformAmp = shaderProgram.uniformLocation("amp");
+    GLint uniformFreq = shaderProgram.uniformLocation("freq");
+    GLint uniformPhase = shaderProgram.uniformLocation("phase");
+    glUniform1fv(uniformAmp, 2, amp.data());
+    glUniform1fv(uniformFreq, 2, freq.data());
+    glUniform1fv(uniformPhase, 2, phase.data());
 }
 
 void MainView::loadMesh()
