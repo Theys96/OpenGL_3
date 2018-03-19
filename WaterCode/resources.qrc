@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>textures/cat_diff.png</file>
-        <file>textures/cat_norm.png</file>
-        <file>textures/cat_spec.png</file>
         <file>textures/rug_logo.png</file>
         <file>shaders/fragshader_water.glsl</file>
         <file>shaders/vertshader_water.glsl</file>
         <file>models/grid.obj</file>
         <file>textures/sea-map.png</file>
+        <file>textures/water_texture.png</file>
+        <file>textures/textile_tex.png</file>
+        <file>textures/flag.png</file>
     </qresource>
 </RCC>

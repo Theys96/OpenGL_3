@@ -26,7 +26,7 @@ void main()
   // Ambient colour does not depend on any vectors.
   float step = smoothstep(-0.2, 0.2, pos.z);
 
-  vec3 texColour = mix(vec3(0.1, 0.2, 0.3), vec3(0.3, 0.6, 0.9), step); //texture(textureSampler, uvCoords).xyz;
+  vec3 texColour = mix(0.3, 1, step) * texture(textureSampler, uvCoords).xyz;
   vec3 colour    = material.x * texColour;
 
   // Calculate light direction vectors in the phong model.

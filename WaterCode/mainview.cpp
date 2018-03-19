@@ -145,7 +145,7 @@ void MainView::loadMesh()
 void MainView::loadTextures()
 {
     glGenTextures(1, &texturePtr);
-    loadTexture(":/textures/sea-map.png", texturePtr);
+    loadTexture(":/textures/rug_logo.png", texturePtr);
 }
 
 void MainView::loadTexture(QString file, GLuint texturePtr)
